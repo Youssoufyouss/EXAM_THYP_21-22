@@ -9,7 +9,7 @@
 <!-- <meta name="viewport" content="width=device-width, initial-scale=0.9, user-scalable=no" charset="utf-8" http-equiv="X-UA-Compatible" content="IE=edge"/> -->
 </head>
 
-<body>
+<body style="background: #FFB66C;">
 <a id="haut"></a>
 <ggg style="padding: 0%; margin: 0%; display: block;">
 <center>
@@ -18,30 +18,63 @@
 <a class="bouton" href="?" title="Actualisation">ACTUALISER</a>
 </fieldset><br/>
 
-<div style="height: 30px;"></div>
+<div style="height: 40px;"></div>
 
 <div class2="animationContenu" id="contenus5">
 
-<h1>Examen THYP du 06/12/2021</h1>
-<h2>DABO Youssouf</h2>
+<h1>Liste des items</h1>
 
 <!-- 2contenu 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 -->
 <hr class="hr3"/><br/>
 
-<b>Lien vers l'exo 1</b><br/>
-<a class="bouton2" href="https://youssoufyouss.github.io/THYP_21-22/ex1" target="blank">Trombinoscope</a><br/><br/>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+<script src="https://d3js.org/d3.v4.min.js"></script>
 
-<b>Lien vers l'exo 2</b><br/>
-<a class="bouton2" href="https://github.com/Youssoufyouss/THYP_21-22/blob/main/projet.md" target="blank">Projet en format MD (MarkDown)</a><br/><br/>
+<div style="padding-left: 10%; padding-right: 10%;">
+<div class="row" id="items"></div>
+</div>
 
-<b>Lien vers l'exo 3</b><br/>
-<a class="bouton2" href="https://github.com/Youssoufyouss/THYP_21-22/blob/main/rs" target="blank">Ressources templates</a><br/><br/>
+<script>
+url = "https://polemika.univ-paris8.fr/omk/api/items?item_set_id=2";
+getData(url);
 
-<b>Lien vers l'exo 4</b><br/>
-<a class="bouton2" href="https://github.com/Youssoufyouss/THYP_21-22/blob/main/onto/onto.ttl" target="blank">Vocabulaire en format TTL (Terse Triple Language)</a><br/><br/>
+function getData(url) {
+d3.queue()
+.defer(d3.json, url)
+.awaitAll(function (error, results) {
+if (error) throw error;
+showItems(results[0]);
+});
+}
+function showItems(data) {
 
-<b>Lien vers l'exo 5</b><br/>
-<a class="bouton2" href="https://youssoufyouss.github.io/THYP_21-22/omk" target="blank">Données Omekas</a><br/><br/>
+let cards = d3.select('#items').selectAll(".col-4").data(data).enter()
+.append('div').attr('class', 'col-sm-4 mb-12').style('margin-bottom', '30px')
+.append("div").attr('class', 'card');
+
+let cardBody = cards.append('div').attr('class', 'card-body');
+cardBody
+.append('h4').text((d) => d["o:id"])
+.append('h6').text((d) => d["o:title"])
+.append('img').attr('id', (d, i) => 'imgCard' + d["o:id"]).style('margin-top', '10px')
+.attr('class', 'center card-img-top')
+.attr('src', (d) => {
+d3.json(d["o:media"][0]["@id"], function (error, results) {
+if (error) throw error;
+d3.select("#" + "imgCard" + d["o:id"]).attr("src", results["o:source"]);
+});
+});
+}
+</script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+crossorigin="anonymous"></script>
 
 <!-- 3footer 30000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 -->
 <hr class="hr3"/><br/>
